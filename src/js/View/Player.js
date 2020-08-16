@@ -36,20 +36,6 @@ export default class Player extends UnitBase {
             case 38 : this.downFlag = true;
             break;
             case 32 : this.shootFlag = true;
-
-            if(this.shootFlag === true){
-              do{
-                const bullet = new Bullet (this.x + this.x / 2, this.y);
-                               bullet.setSpeed(4);
-              }
-              while(this.shootFlag === false){
-                setTimeout(() => {
-                 bullet = new Bullet (this.x + this.x / 2, this.y);
-                               bullet.setSpeed(4);
-                },300);
-              }
-            }
-
             break;
           }
         },false);
@@ -98,8 +84,21 @@ export default class Player extends UnitBase {
 
         // スペースキーを押すとBulletが発射されるようにして下さい。
         // Enemyクラスを参考にしてください。
+        var timeoutID;
+        if(this.shootFlag === true){
+          timeoutID = setInterval(shoot(), 1000);
+        }
 
+        if(this.shootFlag === false){
+          clearInterval(timeoutID);
+        }
 
+        function shoot(){
+        let bullet = new Bullet (this.x + this.x / 2, this.y);
+                 bullet.setSpeed(4);
+        }
+
+        console.log(timeoutID );
         // 敵の弾に当たったらダメージを受けるようにして下さい。
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");
         if(bullet) {
