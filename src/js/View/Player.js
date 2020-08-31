@@ -24,6 +24,7 @@ export default class Player extends UnitBase {
         this.downFlag = false;
 
         this.shootFlag = false;
+        this.shootTimer = 180;
 
         window.addEventListener('keydown',(e) => {
           switch(e.keyCode){ //キー押しっぱはkeydown→keypressを繰り返す為、1fずつタイミング空くのでフラグで立ち上がりとオンをとる
@@ -84,21 +85,14 @@ export default class Player extends UnitBase {
 
         // スペースキーを押すとBulletが発射されるようにして下さい。
         // Enemyクラスを参考にしてください。
-        var timeoutID;
-        if(this.shootFlag === true){
-          timeoutID = setInterval(shoot(), 1000);
+        if(this.shootFlag && this.shootTimer > 10){
+          let bullet = new Bullet (this.x + this.x / 2, this.y);
+          bullet.setSpeed(4);
+          this.shootTimer = 0;
+          console.log("shoot");
         }
+        this.shootTimer++;
 
-        if(this.shootFlag === false){
-          clearInterval(timeoutID);
-        }
-
-        function shoot(){
-        let bullet = new Bullet (this.x + this.x / 2, this.y);
-                 bullet.setSpeed(4);
-        }
-
-        console.log(timeoutID );
         // 敵の弾に当たったらダメージを受けるようにして下さい。
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");
         if(bullet) {
